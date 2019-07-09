@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { signOut } from '../../actions/signInActions';
+import PropTypes from 'prop-types';
 
 class ProfilePage extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   componentWillMount() {
     const { auth } = this.props;
   }
