@@ -10,7 +10,6 @@ import Firebase, { FirebaseContext } from './components/Firebase';
 
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
-import LandingPage from './components/Landing';
 import SignUpPage from './components/SignUp';
 import SignInPage from './components/SignIn';
 import PasswordForgetPage from './components/PasswordForget';
@@ -29,11 +28,7 @@ ReactDOM.render(
       <BrowserRouter>
         <App>
           <Switch>
-            <Route
-              exact
-              path={ROUTES.LANDING}
-              component={LandingPage}
-            />
+            {/* <Route exact path={ROUTES.LANDING} component={CmsPage} /> */}
             <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
             <Route path={ROUTES.SIGN_IN} component={SignInPage} />
             <Route
@@ -43,7 +38,7 @@ ReactDOM.render(
             <Route path={ROUTES.HOME} component={HomePage} />
             <Route path={ROUTES.ACCOUNT} component={AccountPage} />
             <Route path={ROUTES.ADMIN} component={AdminPage} />
-            <Route component={CmsPage} />
+            <Route component={props => <CmsPage {...props} />} />
           </Switch>
         </App>
       </BrowserRouter>

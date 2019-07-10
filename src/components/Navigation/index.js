@@ -28,6 +28,15 @@ const NavigationAuth = ({ authUser }) => (
         </li>
         <li className="nav-item">
           <NavLink
+            to="/about"
+            className="nav-link"
+            activeClassName="active"
+          >
+            About Us
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
             to={ROUTES.HOME}
             className="nav-link"
             activeClassName="active"
@@ -42,6 +51,15 @@ const NavigationAuth = ({ authUser }) => (
             activeClassName="active"
           >
             Account
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
+            to="/home-page"
+            className="nav-link"
+            activeClassName="active"
+          >
+            Home Page
           </NavLink>
         </li>
         {!!authUser.roles[ROLES.ADMIN] && (
@@ -93,7 +111,7 @@ const NavigationNonAuth = () => (
 );
 
 const mapStateToProps = state => ({
-  authUser: state.sessionState.authUser,
+  authUser: state.sessionState.authUser
 });
 
 export default connect(mapStateToProps)(Navigation);
