@@ -6,7 +6,10 @@ import { FirebaseConfig } from '../../config/keys';
 
 class Firebase {
   constructor() {
-    app.initializeApp(FirebaseConfig);
+    if (!app.apps.length) {
+      app.initializeApp(FirebaseConfig);
+    }
+    //app.initializeApp(FirebaseConfig);
 
     /* Helper */
 
@@ -48,7 +51,7 @@ class Firebase {
 
   doSendEmailVerification = () =>
     this.auth.currentUser.sendEmailVerification({
-      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
+      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
     });
 
   doPasswordUpdate = password =>
@@ -75,7 +78,7 @@ class Firebase {
               email: authUser.email,
               emailVerified: authUser.emailVerified,
               providerData: authUser.providerData,
-              ...dbUser,
+              ...dbUser
             };
 
             next(authUser);
@@ -88,17 +91,23 @@ class Firebase {
   // *** User API ***
 
   user = uid => this.db.ref(`users/${uid}`);
-
   users = () => this.db.ref('users');
 
   // *** Message API ***
 
   message = uid => this.db.ref(`messages/${uid}`);
-
   messages = () => this.db.ref('messages');
 
   page = uid => this.db.ref(`page/${uid}`);
   pages = () => this.db.ref('page');
+
+  getPages = () => {
+    return this.pages()
+      .once('value')
+      .then(snapshot => {
+        return snapshot.val();
+      });
+  };
 }
 
 export default Firebase;

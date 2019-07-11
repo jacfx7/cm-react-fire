@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import Navigation from '../Navigation';
 
@@ -12,11 +14,11 @@ class App extends Component {
     return (
       <>
         <Navigation />
-        <div className="container">
-          <div className="justify-content-center">
-            {this.props.children}
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div className="container">
+            <div className="justify-content-center">{this.props.children}</div>
           </div>
-        </div>
+        </MuiPickersUtilsProvider>
       </>
     );
   }

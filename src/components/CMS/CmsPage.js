@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import * as TYPES from '../../constants/actions';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import * as ROLES from '../../constants/roles';
 import PageContent from './PageContent';
 import PageNotFound from './PageNotFound';
 
@@ -19,31 +21,44 @@ class CmsPage extends Component {
   }
 
   componentDidMount() {
-    const { pages, location } = this.props;
+    const { pages } = this.props;
     if (pages.length === 0) {
       this.setState({ loading: true });
     }
-
     this.props.firebase.pages().on('value', snapshot => {
-      this.props.onSetPages(snapshot.val(), location.pathname);
-      this.props.onSetPage(getPageBySlug(pages, location.pathname));
+      this.props.onSetPages(snapshot.val());
       this.setState({ loading: false });
     });
   }
 
+  componentWillUpdate() {
+    const { pages, location, page, lastLocation } = this.props;
+    if (!page && pages.length > 0 && location.pathname !== lastLocation) {
+      this.props.onSetPage(getPageBySlug(pages, location.pathname));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { pages } = this.props;
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.props.onClearPage(this.props.location.pathname);
+      this.props.onSetPage(getPageBySlug(pages, nextProps.location.pathname));
+    }
+  }
+
   componentWillUnmount() {
     this.props.firebase.pages().off();
+    this.props.onClearPage();
   }
 
   render() {
-    const { page } = this.props;
+    const { page, authUser } = this.props;
+
+    const isAdmin = authUser && !!authUser.roles[ROLES.ADMIN];
     return (
       <>
-        {page ? (
-          <PageContent sourceHtml={page.pageContent} />
-        ) : (
-          <PageNotFound />
-        )}
+        {page ? <PageContent sourceHtml={page.pageContent} /> : <PageNotFound />}
+        {isAdmin && page && <Link to={ROUTES.EDIT_CMS + '/' + page.slug}>Edit Page</Link>}
       </>
     );
   }
@@ -60,10 +75,7 @@ const getPageBySlug = (pages, slug) => {
   } else {
     slug = slug.replace('/', '');
   }
-  debugger;
-  const page = pages.filter(
-    page => page.slug === slug && page.status === 'published'
-  );
+  const page = pages.filter(page => page.slug === slug && page.status === 'published');
   if (page) {
     return page[0];
   }
@@ -71,33 +83,19 @@ const getPageBySlug = (pages, slug) => {
 };
 
 const mapStateToProps = state => ({
+  lastLocation: state.pageState.lastLocation,
   page: state.pageState.page,
   pages: Object.keys(state.pageState.pages || {}).map(key => ({
     ...state.pageState.pages[key],
     uid: key
-  }))
+  })),
+  authUser: state.sessionState.authUser
 });
 
-/* const mapStateToProps = (state, ownProps) => {
-  let pageSlug = ownProps.location.pathname;
-  
-  const page =
-    pageSlug &&
-    state.pageState.pages &&
-    state.pageState.pages.length > 0
-      ? getPageBySlug(state.pageState.pages, pageSlug)
-      : newPage;
-
-  return {
-    page: page,
-    pages: state.pageState.pages
-  };
-};
- */
 const mapDispatchToProps = dispatch => ({
-  onSetPages: (pages, slug) =>
-    dispatch({ type: TYPES.LOAD_PAGES_SUCCESS, pages, slug }),
-  onSetPage: page => dispatch({ type: TYPES.LOAD_PAGE_SUCCESS, page })
+  onSetPages: pages => dispatch({ type: TYPES.LOAD_PAGES_SUCCESS, pages }),
+  onSetPage: page => dispatch({ type: TYPES.LOAD_PAGE_SUCCESS, page }),
+  onClearPage: location => dispatch({ type: TYPES.CLEAR_PAGE_SUCCESS, location })
 });
 
 export default compose(

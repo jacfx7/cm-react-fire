@@ -16,7 +16,7 @@ import PasswordForgetPage from './components/PasswordForget';
 import HomePage from './components/Home';
 import AccountPage from './components/Account';
 import AdminPage from './components/Admin';
-import { CmsPage } from './components/CMS';
+import { CmsPage, ManageCmsPage } from './components/CMS';
 
 import * as ROUTES from './constants/routes';
 
@@ -31,13 +31,11 @@ ReactDOM.render(
             {/* <Route exact path={ROUTES.LANDING} component={CmsPage} /> */}
             <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
             <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-            <Route
-              path={ROUTES.PASSWORD_FORGET}
-              component={PasswordForgetPage}
-            />
+            <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
             <Route path={ROUTES.HOME} component={HomePage} />
             <Route path={ROUTES.ACCOUNT} component={AccountPage} />
             <Route path={ROUTES.ADMIN} component={AdminPage} />
+            <Route path={ROUTES.EDIT_CMS_ROUTE} component={props => <ManageCmsPage {...props} />} />
             <Route component={props => <CmsPage {...props} />} />
           </Switch>
         </App>

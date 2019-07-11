@@ -2,7 +2,8 @@ import * as TYPES from '../constants/actions';
 
 const INITIAL_STATE = {
   page: null,
-  pages: []
+  pages: [],
+  lastLocation: null
 };
 
 const applySetPages = (state, action) => ({
@@ -15,13 +16,20 @@ const applySetPage = (state, action) => ({
   page: action.page
 });
 
+const applyClearPage = (state, action) => ({
+  ...state,
+  page: null,
+  lastLocation: action.location
+});
+
 function pageReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TYPES.LOAD_PAGES_SUCCESS:
       return applySetPages(state, action);
     case TYPES.LOAD_PAGE_SUCCESS:
-      debugger;
       return applySetPage(state, action);
+    case TYPES.CLEAR_PAGE_SUCCESS:
+      return applyClearPage(state, action);
     default:
       return state;
   }
