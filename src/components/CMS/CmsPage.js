@@ -10,6 +10,7 @@ import * as ROUTES from '../../constants/routes';
 import * as ROLES from '../../constants/roles';
 import PageContent from './PageContent';
 import PageNotFound from './PageNotFound';
+import Spinner from '../Spinner';
 
 class CmsPage extends Component {
   constructor(props) {
@@ -52,12 +53,12 @@ class CmsPage extends Component {
   }
 
   render() {
-    const { page, authUser } = this.props;
+    const { page, pages, authUser } = this.props;
 
     const isAdmin = authUser && !!authUser.roles[ROLES.ADMIN];
     return (
       <>
-        {page ? <PageContent sourceHtml={page.pageContent} /> : <PageNotFound />}
+        {pages && pages.length > 0 ? page ? <PageContent sourceHtml={page.pageContent} /> : <PageNotFound /> : <Spinner />}
         {isAdmin && page && <Link to={ROUTES.EDIT_CMS + '/' + page.slug}>Edit Page</Link>}
       </>
     );

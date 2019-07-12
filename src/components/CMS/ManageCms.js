@@ -136,13 +136,15 @@ const mapStateToProps = (state, ownProps) => {
     actions.loadPages();
   } */
   let pageSlug = ownProps.match.params.length === 0 ? 0 : ownProps.match.params.slug;
-  const page = pageSlug && state.pages.length > 0 ? getPageBySlug(state.pageState.pages, pageSlug) : newPage;
+  const pages = Object.keys(state.pageState.pages || {}).map(key => ({
+    ...state.pageState.pages[key],
+    uid: key
+  }));
+
+  const page = pageSlug && pages.length > 0 ? getPageBySlug(pages, pageSlug) : newPage;
   return {
     page,
-    pages: Object.keys(state.pageState.pages || {}).map(key => ({
-      ...state.pageState.pages[key],
-      uid: key
-    })),
+    pages: pages,
     loading: state.apiCallsInProgress > 0
   };
 };

@@ -19,7 +19,7 @@ const ManageCmsForm = ({ page, onSave, onChange, onEditorChange, onDateChange, s
           {errors.onSave}
         </div>
       )}
-      <Grid container spacing={24} alignItems="center" justify="flex-start">
+      <Grid container alignItems="center" justify="flex-start">
         <Grid item xs={12}>
           <TextField
             name="title"
@@ -57,7 +57,7 @@ const ManageCmsForm = ({ page, onSave, onChange, onEditorChange, onDateChange, s
         <Grid item xs={3}>
           <DateTimePicker
             name="publishedAt"
-            keyboard
+            keyboard="true"
             margin="normal"
             label="Publish Date"
             value={page.publishedAt || null}
@@ -79,7 +79,7 @@ const ManageCmsForm = ({ page, onSave, onChange, onEditorChange, onDateChange, s
           />
         </Grid>
         <Grid item xs={3}>
-          <button type="submit" disabled={saving} className="btn btn-primary">
+          <button type="submit" disabled={saving} className="btn btn-primary my-2">
             {saving ? 'Saving...' : 'Save'}
           </button>
         </Grid>
