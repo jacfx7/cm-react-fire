@@ -6,7 +6,9 @@ import { compose } from 'recompose';
 import ManageCmsForm from './ManageCmsForm';
 import Spinner from '../Spinner';
 import * as TYPES from '../../constants/actions';
+import * as ROLES from '../../constants/roles';
 import { withFirebase } from '../Firebase';
+import { withEmailVerification, withAuthorization } from '../Session';
 
 const newPage = {
   id: null,
@@ -40,6 +42,10 @@ class ManageCmsPage extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    if (props.page === null || state.page === null) {
+      return null;
+    }
+    debugger;
     if (props.page.id !== state.page.id) return { page: props.page };
     return null;
   }
@@ -56,20 +62,41 @@ class ManageCmsPage extends Component {
     event.preventDefault();
     if (!this.formIsValid()) return;
     this.setState({ saving: true });
-    this.props.actions
-      .savePage(this.state.page)
-      .then(() => {
-        this.setState({
-          saving: false
-        });
+
+    if (this.state.page.uid) {
+      try {
+        this.updatePage();
         toast.success('Page saved.');
-      })
-      .catch(error => {
-        this.setState({
-          saving: false,
-          errors: { onSave: error.message }
-        });
+        this.setState({ saving: false });
+        this.props.onPageSaved(this.state.page);
+      } catch (error) {
+        this.props.onSaveError(error);
+      }
+    } else {
+      try {
+        this.createNewPage();
+        toast.success('Page saved.');
+        this.setState({ saving: false });
+        this.props.onPageSaved(this.state.page);
+      } catch (error) {
+        this.props.onSaveError(error);
+      }
+    }
+  };
+
+  createNewPage = () => {
+    this.props.firebase
+      .pages()
+      .push()
+      .set(this.state.page, error => {
+        throw error;
       });
+  };
+
+  updatePage = () => {
+    this.props.firebase.page(this.state.page.uid).set(this.state.page, error => {
+      throw error;
+    });
   };
 
   handleChange = event => {
@@ -132,9 +159,6 @@ const getPageBySlug = (pages, slug) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  /* if (state.pages.length === 0) {
-    actions.loadPages();
-  } */
   let pageSlug = ownProps.match.params.length === 0 ? 0 : ownProps.match.params.slug;
   const pages = Object.keys(state.pageState.pages || {}).map(key => ({
     ...state.pageState.pages[key],
@@ -151,11 +175,17 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   onSetPages: pages => dispatch({ type: TYPES.LOAD_PAGES_SUCCESS, pages }),
-  onSetPage: page => dispatch({ type: TYPES.LOAD_PAGE_SUCCESS, page })
+  onSetPage: page => dispatch({ type: TYPES.LOAD_PAGE_SUCCESS, page }),
+  onSaveError: error => dispatch({ type: TYPES.PAGE_SAVE_FAILURE, error }),
+  onPageSaved: page => dispatch({ type: TYPES.PAGE_SAVE_SUCCESS, page })
 });
+
+const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
 
 export default compose(
   withFirebase,
+  withEmailVerification,
+  withAuthorization(condition),
   connect(
     mapStateToProps,
     mapDispatchToProps

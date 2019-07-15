@@ -42,7 +42,7 @@ class CmsPage extends Component {
   componentWillReceiveProps(nextProps) {
     const { pages } = this.props;
     if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.props.onClearPage(this.props.location.pathname);
+      //this.props.onClearPage(this.props.location.pathname);
       this.props.onSetPage(getPageBySlug(pages, nextProps.location.pathname));
     }
   }

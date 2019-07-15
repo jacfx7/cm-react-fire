@@ -3,7 +3,8 @@ import * as TYPES from '../constants/actions';
 const INITIAL_STATE = {
   page: null,
   pages: [],
-  lastLocation: null
+  lastLocation: null,
+  error: null
 };
 
 const applySetPages = (state, action) => ({
@@ -22,6 +23,16 @@ const applyClearPage = (state, action) => ({
   lastLocation: action.location
 });
 
+const applyPageSaved = (state, action) => ({
+  ...state,
+  page: action.page
+});
+
+const applyPageError = (state, action) => ({
+  ...state,
+  error: action.error
+});
+
 function pageReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TYPES.LOAD_PAGES_SUCCESS:
@@ -30,6 +41,10 @@ function pageReducer(state = INITIAL_STATE, action) {
       return applySetPage(state, action);
     case TYPES.CLEAR_PAGE_SUCCESS:
       return applyClearPage(state, action);
+    case TYPES.PAGE_SAVE_SUCCESS:
+      return applyPageSaved(state, action);
+    case TYPES.PAGE_SAVE_FAILURE:
+      return applyPageError(state, action);
     default:
       return state;
   }
