@@ -42,11 +42,8 @@ class ManageCmsPage extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.page === null || state.page === null) {
-      return null;
-    }
     debugger;
-    if (props.page.id !== state.page.id) return { page: props.page };
+    if (props.page && props.page.id !== state.page.id) return { page: props.page };
     return null;
   }
 
