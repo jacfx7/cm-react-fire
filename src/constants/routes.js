@@ -6,5 +6,6 @@ export const ACCOUNT = '/account';
 export const PASSWORD_FORGET = '/pw-forget';
 export const ADMIN = '/admin';
 export const ADMIN_DETAILS = '/admin/:id';
+export const CMS = '/cms';
 export const EDIT_CMS_ROUTE = '/cms-edit/:slug';
 export const EDIT_CMS = '/cms-edit';

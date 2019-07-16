@@ -148,7 +148,7 @@ class ManageCmsPage extends Component {
 }
 
 const getPageBySlug = (pages, slug) => {
-  const page = pages.filter(page => page.slug === slug && page.status === 'published');
+  const page = pages.filter(page => page.slug === slug);
   if (page) {
     return page[0];
   }

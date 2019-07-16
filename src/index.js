@@ -16,7 +16,7 @@ import PasswordForgetPage from './components/PasswordForget';
 import HomePage from './components/Home';
 import AccountPage from './components/Account';
 import AdminPage from './components/Admin';
-import { CmsPage, ManageCmsPage } from './components/CMS';
+import { CmsPage, ManageCmsPage, CmsListPage } from './components/CMS';
 
 import * as ROUTES from './constants/routes';
 
@@ -35,6 +35,7 @@ ReactDOM.render(
             <Route path={ROUTES.HOME} component={HomePage} />
             <Route path={ROUTES.ACCOUNT} component={AccountPage} />
             <Route path={ROUTES.ADMIN} component={AdminPage} />
+            <Route path={ROUTES.CMS} component={CmsListPage} />
             <Route path={ROUTES.EDIT_CMS_ROUTE} component={props => <ManageCmsPage {...props} />} />
             <Route component={props => <CmsPage {...props} />} />
           </Switch>
