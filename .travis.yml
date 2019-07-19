@@ -1,8 +1,10 @@
 language: node_js
 node_js:
   - '10'
-install:
+before_install:
   - npm install -g firebase-tools
+install:
+  - yarn install
 script:
   - npm test
 after_success:
