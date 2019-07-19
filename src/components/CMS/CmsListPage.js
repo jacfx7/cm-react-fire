@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
 import { compose } from 'recompose';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
