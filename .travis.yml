@@ -7,5 +7,6 @@ install:
   - yarn install
 script:
   - npm test
+  - npm run build
 after_success:
   - firebase deploy --project headstrong-dev --token $FIREBASE_TOKEN
