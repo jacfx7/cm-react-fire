@@ -8,14 +8,29 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const SignInPage = () => (
-  <div>
+  <div className="cm_login">
     <h1>SignIn</h1>
     <SignInForm />
-    <SignInGoogle />
-    <SignInFacebook />
-    <SignInTwitter />
-    <PasswordForgetLink />
-    <SignUpLink />
+    <div className="row cm_row-sm-offset-3">
+      <div className="col-xs-12 col-sm-6">
+        <PasswordForgetLink />
+        <SignUpLink />
+      </div>
+    </div>
+    <div className="row cm_row-sm-offset-3 cm_loginOr">
+      <div className="col-xs-12 col-sm-6">
+        <hr className="cm_hrOr" />
+        <span className="cm_spanOr" />
+      </div>
+    </div>
+
+    <div class="row cm_row-sm-offset-3 cm_socialButtons">
+      <div className="col-xs-12 col-sm-6">
+        <SignInGoogle />
+        <SignInFacebook />
+        <SignInTwitter />
+      </div>
+    </div>
   </div>
 );
 
@@ -67,27 +82,37 @@ class SignInFormBase extends Component {
     const isInvalid = password === '' || email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
+      <div className="row cm_row-sm-offset-3">
+        <div className="col-xs-12 col-sm-6">
+          <form className="cm_loginForm" onSubmit={this.onSubmit}>
+            <div className="input-group my-3">
+              <input
+                className="form-control"
+                name="email"
+                value={email}
+                onChange={this.onChange}
+                type="text"
+                placeholder="Email Address"
+              />
+            </div>
+            <div className="input-group my-3">
+              <input
+                className="form-control"
+                name="password"
+                value={password}
+                onChange={this.onChange}
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <button className="btn btn-lg btn-outline-primary btn-block my-3" disabled={isInvalid} type="submit">
+              Sign In
+            </button>
 
-        {error && <p>{error.message}</p>}
-      </form>
+            {error && <p>{error.message}</p>}
+          </form>
+        </div>
+      </div>
     );
   }
 }
@@ -130,7 +155,9 @@ class SignInGoogleBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
+        <button className="btn btn-lg btn-block cm_btn-google-plus my-3" type="submit">
+          <i className="fa fa-google fa-2x" />
+        </button>
 
         {error && <p>{error.message}</p>}
       </form>
@@ -176,7 +203,9 @@ class SignInFacebookBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Facebook</button>
+        <button className="btn btn-lg btn-block cm_btn-facebook my-3" type="submit">
+          <i className="fa fa-facebook fa-2x" />
+        </button>
 
         {error && <p>{error.message}</p>}
       </form>
@@ -222,7 +251,9 @@ class SignInTwitterBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Twitter</button>
+        <button className="btn btn-lg btn-block cm_btn-twitter my-3" type="submit">
+          <i className="fa fa-twitter fa-2x" />
+        </button>
 
         {error && <p>{error.message}</p>}
       </form>
