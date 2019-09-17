@@ -119,6 +119,11 @@ a:hover {
   color: #ff5400;
   text-decoration: none;
 }
+
+.MuiButton-containedPrimary:hover {
+  color: white;
+}
+
 .cm_login .cm_authTitle {
   text-align: center;
   line-height: 300%;

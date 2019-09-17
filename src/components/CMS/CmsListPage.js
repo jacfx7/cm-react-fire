@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import { toast } from 'react-toastify';
 import { compose } from 'recompose';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import matchSorter from 'match-sorter';
 import { Redirect, Link } from 'react-router-dom';
+import IconButton from '@material-ui/core/Button';
+import CreateIcon from '@material-ui/icons/Create';
+import MaterialTable from 'material-table';
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 import * as TYPES from '../../constants/actions';
 import * as ROLES from '../../constants/roles';
+import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import { withEmailVerification, withAuthorization } from '../Session';
 
@@ -39,47 +43,51 @@ class CmsListPage extends Component {
 
   render() {
     const { pages, loading } = this.props;
+    const cellStyle = {
+      padding: '5px'
+    };
     const columns = [
       {
-        Header: 'Title',
-        accessor: 'title',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['title'] }),
-        filterAll: true,
-        Cell: row => <Link to={'/cms-edit/' + row.original.slug}>{row.original.title}</Link>
+        title: '',
+        field: 'slug',
+        render: rowData => (
+          <div style={{ textAlign: 'center' }}>
+            <Tooltip title="View Details" aria-label="View Details" placement="top">
+              <IconButton
+                color="primary"
+                aria-label="View Details"
+                to={`${ROUTES.EDIT_CMS}/${rowData.slug}`}
+                component={Link}
+              >
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        ),
+        cellStyle: cellStyle
       },
       {
-        Header: 'Slug',
-        accessor: 'slug',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['slug'] }),
-        filterAll: true
+        title: 'Title',
+        field: 'title'
       },
       {
-        Header: 'Status',
-        accessor: 'status',
-        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['status'] }),
-        filterAll: true
+        title: 'Slug',
+        field: 'slug'
+      },
+      {
+        title: 'Status',
+        field: 'status'
       }
     ];
 
     return (
       <div>
-        {this.state.redirectToAddCmsPage && <Redirect to="/cms-edit/new-page" />}
-        <h1>CMS Pages</h1>
         <div>
-          <input
-            type="submit"
-            value="Add New CMS Page"
-            className="btn btn-primary my-2"
-            onClick={() => this.setState({ redirectToAddCmsPage: true })}
-          />
-          <ReactTable
-            data={pages}
-            columns={columns}
-            defaultPageSize={10}
-            loading={loading}
-            filterable={true}
-            className="-striped -highlight"
-          />
+          <Button className="my-3" variant="contained" color="primary" to={`/cms-edit/new-page`} component={Link}>
+            <AddIcon className="mx-2">send</AddIcon>
+            Add New CMS Page
+          </Button>
+          <MaterialTable title="CMS Pages" columns={columns} data={pages} />
         </div>
       </div>
     );
