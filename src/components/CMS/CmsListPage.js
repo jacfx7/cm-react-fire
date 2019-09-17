@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import { toast } from 'react-toastify';
 import { compose } from 'recompose';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
 import MaterialTable from 'material-table';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import * as TYPES from '../../constants/actions';
 import * as ROLES from '../../constants/roles';
@@ -21,8 +22,7 @@ class CmsListPage extends Component {
     super(props);
 
     this.state = {
-      loading: false,
-      redirectToAddCmsPage: false
+      loading: false
     };
   }
 
@@ -46,6 +46,7 @@ class CmsListPage extends Component {
     const cellStyle = {
       padding: '5px'
     };
+
     const columns = [
       {
         title: '',
@@ -56,7 +57,7 @@ class CmsListPage extends Component {
               <IconButton
                 color="primary"
                 aria-label="View Details"
-                to={`${ROUTES.EDIT_CMS}/${rowData.slug}`}
+                to={`${ROUTES.ADMIN_CMS_PAGE}/${rowData.slug}`}
                 component={Link}
               >
                 <CreateIcon />
@@ -83,11 +84,17 @@ class CmsListPage extends Component {
     return (
       <div>
         <div>
-          <Button className="my-3" variant="contained" color="primary" to={`/cms-edit/new-page`} component={Link}>
+          <Button
+            className="my-3"
+            variant="contained"
+            color="primary"
+            to={`${ROUTES.ADMIN_CMS_PAGE}/new-page`}
+            component={Link}
+          >
             <AddIcon className="mx-2">send</AddIcon>
             Add New CMS Page
           </Button>
-          <MaterialTable title="CMS Pages" columns={columns} data={pages} />
+          {loading ? <CircularProgress /> : <MaterialTable title="CMS Pages" columns={columns} data={pages} />}
         </div>
       </div>
     );

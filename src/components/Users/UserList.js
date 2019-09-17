@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
 import MaterialTable from 'material-table';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import * as TYPES from '../../constants/actions';
 import { withFirebase } from '../Firebase';
@@ -51,7 +52,12 @@ class UserList extends Component {
         render: rowData => (
           <div style={{ textAlign: 'center' }}>
             <Tooltip title="View Details" aria-label="View Details" placement="top">
-              <IconButton color="primary" aria-label="View Details" to={`${ROUTES.ADMIN}/${rowData.uid}`} component={Link}>
+              <IconButton
+                color="primary"
+                aria-label="View Details"
+                to={`${ROUTES.ADMIN_USERS}/${rowData.uid}`}
+                component={Link}
+              >
                 <CreateIcon />
               </IconButton>
             </Tooltip>
@@ -78,9 +84,7 @@ class UserList extends Component {
     ];
 
     return (
-      <div>
-        <MaterialTable title="Registered Users" columns={columns} data={users} />
-      </div>
+      <div>{loading ? <CircularProgress /> : <MaterialTable title="Registered Users" columns={columns} data={users} />}</div>
     );
   }
 }

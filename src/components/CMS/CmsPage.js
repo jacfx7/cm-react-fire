@@ -58,7 +58,7 @@ class CmsPage extends Component {
     return (
       <>
         {pages && pages.length > 0 ? page ? <PageContent sourceHtml={page.pageContent} /> : <PageNotFound /> : <Spinner />}
-        {isAdmin && page && <Link to={ROUTES.EDIT_CMS + '/' + page.slug}>Edit Page</Link>}
+        {isAdmin && page && <Link to={ROUTES.ADMIN_CMS_PAGE + '/' + page.slug}>Edit Page</Link>}
       </>
     );
   }

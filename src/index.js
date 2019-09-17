@@ -5,9 +5,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './components/App';
 import Firebase, { FirebaseContext } from './components/Firebase';
 
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
 import SignUpPage from './components/SignUp';
@@ -17,6 +17,7 @@ import HomePage from './components/Home';
 import AccountPage from './components/Account';
 import AdminPage from './components/Admin';
 import { CmsPage, ManageCmsPage, CmsListPage } from './components/CMS';
+import { UserList, UserItem } from './components/Users';
 
 import * as ROUTES from './constants/routes';
 
@@ -35,8 +36,10 @@ ReactDOM.render(
             <Route path={ROUTES.HOME} component={HomePage} />
             <Route path={ROUTES.ACCOUNT} component={AccountPage} />
             <Route path={ROUTES.ADMIN} component={AdminPage} />
-            <Route path={ROUTES.CMS} component={CmsListPage} />
-            <Route path={ROUTES.EDIT_CMS_ROUTE} component={props => <ManageCmsPage {...props} />} />
+            <Route path={ROUTES.ADMIN_CMS} component={CmsListPage} />
+            <Route path={ROUTES.ADMIN_CMS_EDIT_PAGE} component={props => <ManageCmsPage {...props} />} />
+            <Route exact path={ROUTES.ADMIN_USER_DETAILS} component={UserItem} />
+            <Route exact path={ROUTES.ADMIN_USERS} component={UserList} />
             <Route component={props => <CmsPage {...props} />} />
           </Switch>
         </App>
